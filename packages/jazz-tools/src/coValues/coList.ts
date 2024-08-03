@@ -22,7 +22,6 @@ import {
     SchemaInit,
     co,
     ensureCoValueLoaded,
-    inspect,
     isRefEncoded,
     loadCoValue,
     loadCoValueEf,
@@ -323,7 +322,7 @@ export class CoList<Item = any> extends Array<Item> implements CoValue {
         }
     }
 
-    [inspect]() {
+    [Symbol.for("nodejs.util.inspect.custom")]() {
         return this.toJSON();
     }
 

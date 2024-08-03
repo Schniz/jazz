@@ -31,7 +31,6 @@ import {
     Profile,
     Ref,
     SchemaInit,
-    inspect,
     subscriptionsScopes,
     loadCoValue,
     loadCoValueEf,
@@ -258,7 +257,7 @@ export class Account extends CoValueBase implements CoValue {
         };
     }
 
-    [inspect]() {
+    [Symbol.for("nodejs.util.inspect.custom")]() {
         return this.toJSON();
     }
 
