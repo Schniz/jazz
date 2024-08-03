@@ -1,0 +1,4 @@
+{
+  "extends": "jazz-tools/tsconfig.json",
+  "include": ["src"]
+}
