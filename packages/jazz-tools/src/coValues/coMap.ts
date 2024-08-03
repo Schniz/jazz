@@ -20,6 +20,7 @@ import {
     CoValueBase,
     Ref,
     SchemaInit,
+    inspect,
     makeRefs,
     subscriptionsScopes,
     ItemsSym,
@@ -93,9 +94,7 @@ export class CoMap extends CoValueBase implements CoValue {
     get _schema() {
         return (this.constructor as typeof CoMap)._schema as {
             [key: string]: Schema;
-        } & {
-            /** @internal */ [ItemsSym]?: Schema;
-        };
+        } & { [ItemsSym]?: Schema };
     }
 
     /**
@@ -288,7 +287,7 @@ export class CoMap extends CoValueBase implements CoValue {
         };
     }
 
-    [Symbol.for("nodejs.util.inspect.custom")]() {
+    [inspect]() {
         return this.toJSON();
     }
 
@@ -354,7 +353,6 @@ export class CoMap extends CoValueBase implements CoValue {
     static Record<Value>(value: IfCo<Value, Value>) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
         class RecordLikeCoMap extends CoMap {
-            /** @internal */
             [ItemsSym] = value;
         }
         // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging

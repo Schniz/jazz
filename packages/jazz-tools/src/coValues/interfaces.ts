@@ -8,6 +8,7 @@ import {
     Group,
     SubscriptionScope,
     Ref,
+    inspect,
     subscriptionsScopes,
 } from "../internal.js";
 import { fulfillsDepth } from "./deepLoading.js";
@@ -40,6 +41,9 @@ export interface CoValue {
     /** @category Stringifying & Inspection */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toJSON(key?: string, seenAbove?: ID<CoValue>[]): any[] | object | string;
+    /** @category Stringifying & Inspection */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [inspect](): any;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -112,7 +116,7 @@ export class CoValueBase implements CoValue {
         };
     }
 
-    [Symbol.for("nodejs.util.inspect.custom")]() {
+    [inspect]() {
         return this.toJSON();
     }
 

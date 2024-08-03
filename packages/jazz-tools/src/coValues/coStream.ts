@@ -28,6 +28,7 @@ import {
     Account,
     CoValueBase,
     Ref,
+    inspect,
     co,
     SchemaInit,
     isRefEncoded,
@@ -74,7 +75,6 @@ export class CoStream<Item = any> extends CoValueBase implements CoValue {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static _schema: any;
     get _schema(): {
-        /** @internal */
         [ItemsSym]: SchemaFor<Item>;
     } {
         return (this.constructor as typeof CoStream)._schema;
@@ -179,7 +179,7 @@ export class CoStream<Item = any> extends CoValueBase implements CoValue {
         };
     }
 
-    [Symbol.for("nodejs.util.inspect.custom")]() {
+    [inspect]() {
         return this.toJSON();
     }
 
@@ -624,7 +624,7 @@ export class BinaryCoStream extends CoValueBase implements CoValue {
         };
     }
 
-    [Symbol.for("nodejs.util.inspect.custom")]() {
+    [inspect]() {
         return this.toJSON();
     }
 
