@@ -687,7 +687,7 @@ export class BinaryCoStream extends CoValueBase implements CoValue {
 
 type StreamToJsonReturnType<T> = {
     in: {
-        [k: string]: any;
+        [k: string]: unknown;
     };
     id: ID<T>;
     _type: "CoStream";
