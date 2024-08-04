@@ -21,7 +21,11 @@ import {
     Sealed,
 } from "./crypto.js";
 
-type Blake3State = ReturnType<typeof blake3.create>;
+type Blake3State = {
+    _?: never;
+    /** @internal */
+    internal: ReturnType<typeof blake3.create>;
+};
 
 export class PureJSCrypto extends CryptoProvider<Blake3State> {
     static async create(): Promise<PureJSCrypto> {
@@ -33,7 +37,7 @@ export class PureJSCrypto extends CryptoProvider<Blake3State> {
     }
 
     emptyBlake3State(): Blake3State {
-        return blake3.create({});
+        return { internal: blake3.create({}) };
     }
 
     blake3HashOnce(data: Uint8Array) {
@@ -47,12 +51,12 @@ export class PureJSCrypto extends CryptoProvider<Blake3State> {
         return blake3.create({}).update(context).update(data).digest();
     }
 
-    blake3IncrementalUpdate(state: Blake3State, data: Uint8Array) {
-        return state.update(data);
+    blake3IncrementalUpdate(state: Blake3State, data: Uint8Array): Blake3State {
+        return { internal: state.internal.update(data) };
     }
 
     blake3DigestForState(state: Blake3State): Uint8Array {
-        return state.clone().digest();
+        return state.internal.clone().digest();
     }
 
     newEd25519SigningKey(): Uint8Array {
