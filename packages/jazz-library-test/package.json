@@ -5,14 +5,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsup"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "jazz-tools": "workspace:*",
-    "tsup": "^8.2.4",
     "typescript": "^5.5.4"
   }
 }

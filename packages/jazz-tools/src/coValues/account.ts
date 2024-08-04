@@ -40,6 +40,7 @@ import {
     ensureCoValueLoaded,
     subscribeToExistingCoValue,
 } from "../internal.js";
+import { Has } from "./typeHints.js";
 
 /** @category Identity & Permissions */
 export class Account extends CoValueBase implements CoValue {
@@ -78,7 +79,7 @@ export class Account extends CoValueBase implements CoValue {
     declare profile: Profile | null;
     declare root: CoMap | null;
 
-    get _refs() {
+    get _refs(): RefsReturnType<this> {
         const profileID = this._raw.get("profile") as unknown as
             | ID<NonNullable<this["profile"]>>
             | undefined;
@@ -410,3 +411,8 @@ export function isControlledAccount(account: Account): account is Account & {
 } {
     return account.isMe;
 }
+
+type RefsReturnType<T extends Has<"profile" | "root">> = {
+    profile: RefIfCoValue<T["profile"]> | undefined;
+    root: RefIfCoValue<T["root"]> | undefined;
+};

@@ -27,6 +27,7 @@ import {
     subscribeToExistingCoValue,
 } from "../internal.js";
 import { Effect, Stream } from "effect";
+import type { Has } from "./typeHints.js";
 
 /** @category Identity & Permissions */
 export class Profile extends CoMap {
@@ -70,7 +71,7 @@ export class Group extends CoValueBase implements CoValue {
     declare root: CoMap | null;
     declare [MembersSym]: Account | null;
 
-    get _refs() {
+    get _refs(): RefsReturnType<this> {
         const profileID = this._raw.get("profile") as unknown as
             | ID<NonNullable<this["profile"]>>
             | undefined;
@@ -156,7 +157,7 @@ export class Group extends CoValueBase implements CoValue {
         return this;
     }
 
-    get members() {
+    get members(): MembersReturnType<this> {
         return this._raw
             .keys()
             .filter((key) => {
@@ -244,3 +245,25 @@ export class Group extends CoValueBase implements CoValue {
         return subscribeToExistingCoValue(this, depth, listener);
     }
 }
+
+/**
+ * This type allows us to use `this` in `Group.members` without getting the
+ * TypeScript error of "'this' type is available only in a non-static member of a class or interface.(2526)"
+ */
+type MembersReturnType<T extends Has<MembersSym>> = {
+    id: Everyone | ID<T[MembersSym]>;
+    role: undefined | Role;
+    ref: undefined | Ref<NonNullable<T[MembersSym]>>;
+    account: undefined | null | T[MembersSym];
+}[];
+
+/**
+ * This type allows us to use `this` in `Group._refs` without getting the
+ * TypeScript error of "'this' type is available only in a non-static member of a class or interface.(2526)"
+ */
+type RefsReturnType<T extends Has<MembersSym | "root" | "profile">> = {
+    root: (T["root"] extends CoMap ? Ref<T["root"]> : never) | undefined;
+    profile:
+        | (T["profile"] extends Profile ? Ref<T["profile"]> : never)
+        | undefined;
+};

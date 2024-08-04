@@ -1,4 +1,8 @@
 {
   "extends": "jazz-tools/tsconfig.json",
-  "include": ["src"]
+  "compilerOptions": {
+    "declaration": true,
+    "outDir": "dist"
+  },
+  "include": ["src/*"]
 }

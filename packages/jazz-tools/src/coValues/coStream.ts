@@ -152,7 +152,7 @@ export class CoStream<Item = any> extends CoValueBase implements CoValue {
         }
     }
 
-    toJSON() {
+    toJSON(): StreamToJsonReturnType<this> {
         const itemDescriptor = this._schema[ItemsSym] as Schema;
         const mapper =
             itemDescriptor === "json"
@@ -179,7 +179,7 @@ export class CoStream<Item = any> extends CoValueBase implements CoValue {
         };
     }
 
-    [inspect]() {
+    [inspect](): StreamToJsonReturnType<this> {
         return this.toJSON();
     }
 
@@ -616,7 +616,7 @@ export class BinaryCoStream extends CoValueBase implements CoValue {
         return stream;
     }
 
-    toJSON() {
+    toJSON(): BinaryCoStreamToJsonReturnType<this> {
         return {
             id: this.id,
             _type: this._type,
@@ -624,7 +624,7 @@ export class BinaryCoStream extends CoValueBase implements CoValue {
         };
     }
 
-    [inspect]() {
+    [inspect](): BinaryCoStreamToJsonReturnType<this> {
         return this.toJSON();
     }
 
@@ -684,3 +684,21 @@ export class BinaryCoStream extends CoValueBase implements CoValue {
         return subscribeToExistingCoValue(this, depth, listener);
     }
 }
+
+type StreamToJsonReturnType<T> = {
+    in: {
+        [k: string]: any;
+    };
+    id: ID<T>;
+    _type: "CoStream";
+};
+
+type BinaryCoStreamToJsonReturnType<T> = {
+    mimeType?: string | undefined;
+    fileName?: string | undefined;
+    totalSizeBytes?: number | undefined;
+    chunks?: Uint8Array[] | undefined;
+    finished?: boolean | undefined;
+    id: ID<T>;
+    _type: "BinaryCoStream";
+};
